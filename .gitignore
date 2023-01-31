@@ -7,3 +7,5 @@
 # Folders with private data
 application/data/
 application/data_raw/
+
+old/
