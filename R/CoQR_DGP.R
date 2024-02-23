@@ -1,4 +1,4 @@
-# This function generates the data according to the DGP used in Section 3.1
+# This function generates data for a cross-sectional DGP for the CoVaR regression
 sim_CoQR_DGP <- function(n, gamma, Sigma, nu=8, phi=c(0.5,0.8), beta, alpha){
   logZ1 <- 0.5 + 0.3*arima.sim(list(order=c(1,0,0), ar=phi[1]), n=n)
   Z2 <- arima.sim(list(order=c(1,0,0), ar=phi[2]), n=n)

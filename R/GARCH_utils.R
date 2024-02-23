@@ -22,7 +22,7 @@ library(cubature)
 # ntrans       = length of burn-in period
 
 
-CCC.GARCH.sim <- function(GARCH.coef.1, GARCH.coef.2, alpha, beta, nu, rho, n, ntrans=1000){
+CCC.GARCH.sim <- function(GARCH.coef.1, GARCH.coef.2, alpha, beta, nu, rho, n, ntrans=0){
   m   <- n + ntrans
 
   # 0. Calculate "t"-innovations eps
@@ -39,8 +39,12 @@ CCC.GARCH.sim <- function(GARCH.coef.1, GARCH.coef.2, alpha, beta, nu, rho, n, n
 
   # 1. CCC-GARCH(1,1) process
   X <- Y <- sigma.X <- sigma.Y <- numeric(m)  # initializes vectors of X's and sigma^2's to be m long
-  X[1] <- Y[1] <- rnorm(1)                    # (stochastic) start value
-  sigma.X[1] <- sigma.Y[1] <- rnorm(1)^2      # (stochastic) start value
+  sigma.X[1] <- GARCH.coef.1[1]              # GARCH intercept as starting value
+  sigma.Y[1] <- GARCH.coef.2[1]               # GARCH intercept as starting value
+
+  X[1] <- sigma.X[1] * eps[1, 1]
+  Y[1] <- sigma.Y[1] * eps[1, 2]
+
   for(t in 2 : m){
     sigma.X[t] <- GARCH.coef.1[1] + GARCH.coef.1[2] * abs( X[t-1] ) + GARCH.coef.1[3] * abs( Y[t-1] ) + GARCH.coef.1[4] * sigma.X[t-1] + GARCH.coef.1[5] * sigma.Y[t-1]
     sigma.Y[t] <- GARCH.coef.2[1] + GARCH.coef.2[2] * abs( X[t-1] ) + GARCH.coef.2[3] * abs( Y[t-1] ) + GARCH.coef.2[4] * sigma.X[t-1] + GARCH.coef.2[5] * sigma.Y[t-1]
@@ -103,7 +107,7 @@ CoVaR.true.t <- function(alpha, beta, nu, H){
     sigma <-  (nu - 2) / nu * H
     sd.wt <- sqrt(nu / (nu-2) )
     VaR   <- qt(p = beta, df = nu) / sd.wt * sqrt( H[1,1] )
-    prob  <- pmvt(lower=c(VaR, x), upper=c(Inf, Inf), df=nu, sigma=sigma)
+    prob  <- mvtnorm::pmvt(lower=c(VaR, x), upper=c(Inf, Inf), df=nu, sigma=sigma)
 
     return( prob - (1-alpha) * (1-beta) )
   }
@@ -126,9 +130,9 @@ MES.true.t <- function(nu, rho, beta){
   }
   else{
     sd.wt <- sqrt(nu / (nu-2) )
-    f.MES <- function(x, nu, rho) { x[2] * dmvt(x, sigma = (nu - 2) / nu * matrix(c(1, rho, rho, 1), nrow=2), df = nu, log = FALSE) } # "x" is vector
+    f.MES <- function(x, nu, rho) { x[2] * mvtnorm::dmvt(x, sigma = (nu - 2) / nu * matrix(c(1, rho, rho, 1), nrow=2), df = nu, log = FALSE) } # "x" is vector
     VaR   <- qt(p = beta, df = nu) / sd.wt
-    MES   <- 1/(1 - beta) * adaptIntegrate(f.MES, lowerLimit = c(VaR, -Inf), upperLimit = c(Inf, Inf), nu, rho)$integral
+    MES   <- 1/(1 - beta) * cubature::adaptIntegrate(f.MES, lowerLimit = c(VaR, -Inf), upperLimit = c(Inf, Inf), nu, rho)$integral
   }
   return( MES )
 }

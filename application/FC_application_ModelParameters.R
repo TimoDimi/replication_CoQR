@@ -5,7 +5,7 @@ library(tidyr)
 library(rmgarch)
 library(lubridate)
 library(tsibble)
-library(CoQR)
+library(SystemicRisk)
 
 source("R/SystemicDCCroll.R")
 source("R/GARCH_utils.R")
@@ -18,7 +18,6 @@ source("R/GARCH_utils.R")
 ###     available publicly as we do not have the licence to publish the raw data
 ###
 ####################################################################################
-
 
 
 # Set options
@@ -42,44 +41,44 @@ for (jj in 1:length(CoCAViaR_model_set)){
   set.seed(1)
   CoCAViaR_model <- CoCAViaR_model_set[jj]
 
-  Mest_obj <- CoQR(data = data_Assets %>%
-                     dplyr::filter(Asset %in% c("JPM", "SP500"), Date <= Date_max) %>%
-                     tidyr::pivot_wider(names_from = "Asset", values_from = "NegReturn") %>%
-                     rename(x=JPM, y=SP500) %>%
-                     as_tsibble(index=Date),
-                   model=CoCAViaR_model, SRM="CoVaR", beta=beta, alpha=alpha)
+  Mest_obj <- SRM(data = data_Assets %>%
+                    dplyr::filter(Asset %in% c("JPM", "SP500"), Date <= Date_max) %>%
+                    tidyr::pivot_wider(names_from = "Asset", values_from = "NegReturn") %>%
+                    rename(x=JPM, y=SP500) %>%
+                    as_tsibble(index=Date),
+                  model=CoCAViaR_model, risk_measure="CoVaR", beta=beta, alpha=alpha)
   CoCAViaR_modelfits[[paste(CoCAViaR_model)]] <- summary(Mest_obj)
 }
 
 
 CoCAViaR_modelfits$CoCAViaR_SAV_diag
 
-saveRDS(CoCAViaR_modelfits, file = "application/data/CoCAViaR_ModelParameters.rds")
+saveRDS(CoCAViaR_modelfits, file = "application/data/CoCAViaR_ModelParameters_RR.rds")
 
 
 #  Plot in-sample model fits
-CoCAViaR_SAV_fullA_fit <- CoQR(data = data_Assets %>%
-                                 dplyr::filter(Asset %in% c("JPM", "SP500"), Date <= Date_max) %>%
-                                 tidyr::pivot_wider(names_from = "Asset", values_from = "NegReturn") %>%
-                                 rename(x=JPM, y=SP500) %>%
-                                 as_tsibble(index=Date),
-                               model="CoCAViaR_SAV_full", SRM="CoVaR", beta=beta, alpha=alpha)
+CoCAViaR_SAV_fullA_fit <- SRM(data = data_Assets %>%
+                                dplyr::filter(Asset %in% c("JPM", "SP500"), Date <= Date_max) %>%
+                                tidyr::pivot_wider(names_from = "Asset", values_from = "NegReturn") %>%
+                                rename(x=JPM, y=SP500) %>%
+                                as_tsibble(index=Date),
+                              model="CoCAViaR_SAV_full", risk_measure="CoVaR", beta=beta, alpha=alpha)
 
 plot(CoCAViaR_SAV_fullA_fit, facet_names=c("JPM / VaR","SP500 / CoVaR"))
-ggsave("application/output/appl_ISplot.pdf", width=20, height=15, units="cm")
+ggsave("application/output/appl_ISplot_RR.pdf", width=20, height=15, units="cm")
 
 
 
 #  Plot out-of-sample forecasts
-CoCAViaR_SAV_fullA_roll <- CoQRroll(data = data_Assets_full %>%
+CoCAViaR_SAV_fullA_roll <- SRMroll(data = data_Assets %>%
                                  dplyr::filter(Asset %in% c("JPM", "SP500")) %>%
                                  tidyr::pivot_wider(names_from = "Asset", values_from = "NegReturn") %>%
                                  rename(x=JPM, y=SP500) %>%
                                  as_tsibble(index=Date),
                                model="CoCAViaR_SAV_full",
                                length_IS=3000, refit_freq=100,
-                               SRM="CoVaR", beta=beta, alpha=alpha)
+                               risk_measure="CoVaR", beta=beta, alpha=alpha)
 
 plot(CoCAViaR_SAV_fullA_roll, facet_names=c("JPM / VaR","SP500 / CoVaR"))
-ggsave("application/output/appl_OOSplot.pdf", width=20, height=15, units="cm")
+ggsave("application/output/appl_OOSplot_RR.pdf", width=20, height=15, units="cm")
 

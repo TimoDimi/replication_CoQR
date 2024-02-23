@@ -7,7 +7,8 @@ library(cubature)
 library(lubridate)
 library(doParallel)
 library(tsibble)
-library(CoQR)
+library(SystemicRisk)
+library(rlist)
 
 # Load functions for the DCC models
 source("R/GARCH_utils.R")
@@ -22,7 +23,7 @@ source("R/SystemicDCCroll.R")
 ####################################################################################
 
 
-###    This file should be ran on a cluster. It takes approximately 6-12 hours per
+###    This file should be ran on a small cluster. It takes approximately 6-12 hours per
 ###    iteration in the foreach loop
 
 
@@ -31,7 +32,8 @@ alpha <- 0.95
 beta <- 0.95
 length_IS <- 3000
 refit_freq <- 100
-SRM <- "CoVaR"
+refit_freq <- 2000
+sys_risk_measure <- "CoVaR"
 
 # CoCAViaR models
 CoCAViaR_model_set <- c("CoCAViaR_SAV_diag", "CoCAViaR_SAV_fullA", "CoCAViaR_SAV_full",
@@ -69,23 +71,27 @@ asset_names <- c("BAC", "C", "GS", "JPM", "SP500", "SPF")
 AssetCombinations <- rbind(t(combn(asset_names, 2)),
                            t(combn(rev(asset_names), 2)))
 
+
 # Only combinations with SP500 or SPF
 i_SP500 <- which(as.logical(rowSums(AssetCombinations == "SP500")))
 i_SPF <- which(as.logical(rowSums(AssetCombinations == "SPF")))
-AssetCombinations_subset <- AssetCombinations[unique(c(i_SP500, i_SPF)),]
+AssetCombinations_subset <- AssetCombinations[unique(c(i_SP500)),]
+M_AssetPairs <- nrow(AssetCombinations_subset)
+
+# Only combinations with SP500 in second argument
+AssetCombinations_subset <- AssetCombinations[AssetCombinations[,2] == "SP500",]
 M_AssetPairs <- nrow(AssetCombinations_subset)
 
 
-
 # Cluster Settings
-core.max <- 40
+core.max <- 10
 cl <- makeCluster(min(parallel::detectCores()-1, M_AssetPairs, core.max) )
 registerDoParallel(cl)
 start_time <- Sys.time()
 FCs_application <- foreach(
   i_AssetPair = 1:M_AssetPairs,
   .combine=rbind,
-  .packages=c("dplyr", "ggplot2", "tibble", "MTS", "reshape2", "rmgarch", "mvtnorm", "cubature", "lubridate", "CoQR", "tsibble"),
+  .packages=c("dplyr", "ggplot2", "tibble", "MTS", "reshape2", "rmgarch", "mvtnorm", "cubature", "lubridate", "SystemicRisk", "tsibble", "rlist"),
   .errorhandling="remove"
 )%dopar%{
   # Start parallel loop
@@ -107,12 +113,16 @@ FCs_application <- foreach(
   # Dynamic CoQR forecasts for CoVaR
   FC_tbl <- tibble()
   for (CoCAViaR_model in CoCAViaR_model_set){
-    CoQRroll_obj_tmp <- CoQRroll(data=data_AssetPair,
-                                 length_IS=length_IS, refit_freq=refit_freq,
-                                 model=CoCAViaR_model, SRM=SRM, beta=beta, alpha=alpha)
+    CoQRroll_obj_tmp <- SRMroll(data=data_AssetPair,
+                                length_IS=length_IS, refit_freq=refit_freq,
+                                model=CoCAViaR_model, risk_measure=sys_risk_measure, beta=beta, alpha=alpha, init_method="omega")
 
     FC_tbl <- bind_rows(FC_tbl,
-                        CoQRroll_obj_tmp$FC_df %>% mutate(SRM=SRM, model=CoCAViaR_model))
+                        CoQRroll_obj_tmp$FC_df %>%
+                          rename(!!sys_risk_measure:=risk_measure) %>%
+                          mutate(model=CoCAViaR_model,
+                                 risk_measure="CoVaR") %>%
+                          as_tibble())
   }
 
   # DCC GARCH forecasts (for CoVaR and MES)
@@ -128,7 +138,7 @@ FCs_application <- foreach(
       FC_tbl <- bind_rows(FC_tbl,
                           SystemicDCCroll_obj$SRM_FC %>%
                             dplyr::select(-MES) %>%
-                            mutate(SRM="CoVaR", model=paste0(names(DCC_spec_list)[i_DCC_spec],"-", H_sqrt_method)))
+                            mutate(risk_measure="CoVaR", model=paste0(names(DCC_spec_list)[i_DCC_spec],"-", H_sqrt_method)))
     }
   }
 
@@ -140,6 +150,6 @@ end_time <- Sys.time()
 
 
 head(FCs_application)
-saveRDS(FCs_application, file = "application/data/application_FCs.rds")
+saveRDS(FCs_application, file = "application/data/application_FCs_RR.rds")
 
 

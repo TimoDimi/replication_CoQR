@@ -1,0 +1,71 @@
+ % latex table generated in R 4.3.1 by xtable 1.8-4 package
+% Mon Jan 29 10:15:23 2024
+\begin{table}[ht]
+\centering
+\begin{tabular}{lllrrrlrrrllr}
+  \toprule
+assetX & model & empty1 & loss\_VaR & rk\_loss\_VaR & VaR\_violations & empty2 & loss\_CoVaR & rk\_loss\_CoVaR & CoVaR\_violations & empty3 & zone & pval \\ 
+  \midrule
+BAC & CoCAViaR-SAV-fullA &  & 0.658 & 6 & 4.3 &  & 2.953 & 1 & 7.3 &  & green & 0.00 \\ 
+  BAC & CoCAViaR-AS-mixed &  & 0.647 & 2 & 4.2 &  & 3.123 & 2 & 7.5 &  & grey & 0.00 \\ 
+  BAC & CoCAViaR-AS-signs &  & 0.647 & 1 & 4.6 &  & 3.219 & 3 & 5.2 &  & grey & 0.00 \\ 
+  BAC & CoCAViaR-AS-pos &  & 0.653 & 5 & 4.7 &  & 3.448 & 4 & 7.5 &  & green & 0.01 \\ 
+  BAC & CoCAViaR-SAV-diag &  & 0.660 & 9 & 4.5 &  & 3.499 & 5 & 8.7 &  & green & 0.02 \\ 
+  BAC & CoCAViaR-SAV-full &  & 0.658 & 6 & 4.3 &  & 3.560 & 6 & 8.3 &  & green & 0.07 \\ 
+  BAC & DCC-n-Chol &  & 0.660 & 10 & 4.5 &  & 4.489 & 7 & 19.5 &  & yellow & 0.12 \\ 
+  BAC & DCC-gjr-t-Chol &  & 0.649 & 4 & 4.7 &  & 4.623 & 8 & 15.8 &  & grey & 0.00 \\ 
+  BAC & DCC-t-Chol &  & 0.662 & 11 & 4.8 &  & 4.631 & 9 & 17.2 &  &  &  \\ 
+  BAC & DCC-n-sym &  & 0.660 & 8 & 4.5 &  & 4.835 & 10 & 19.5 &  & yellow & 0.43 \\ 
+  BAC & DCC-gjr-t-sym &  & 0.649 & 3 & 4.8 &  & 4.858 & 11 & 16.5 &  & grey & 0.00 \\ 
+  BAC & DCC-t-sym &  & 0.662 & 12 & 4.9 &  & 5.092 & 12 & 17.7 &  & yellow & 0.95 \\ 
+  C & CoCAViaR-SAV-fullA &  & 0.667 & 10 & 4.8 &  & 3.298 & 1 & 4.1 &  & yellow & 0.10 \\ 
+  C & CoCAViaR-SAV-full &  & 0.667 & 10 & 4.8 &  & 3.316 & 2 & 5.0 &  & green & 0.08 \\ 
+  C & CoCAViaR-SAV-diag &  & 0.667 & 8 & 4.9 &  & 3.403 & 3 & 4.1 &  & yellow & 0.14 \\ 
+  C & CoCAViaR-AS-mixed &  & 0.659 & 4 & 4.9 &  & 3.407 & 4 & 5.6 &  & green & 0.03 \\ 
+  C & CoCAViaR-AS-signs &  & 0.658 & 1 & 5.3 &  & 3.463 & 5 & 5.2 &  & green & 0.02 \\ 
+  C & CoCAViaR-AS-pos &  & 0.666 & 5 & 5.8 &  & 3.775 & 6 & 4.8 &  & yellow & 0.44 \\ 
+  C & DCC-n-sym &  & 0.666 & 7 & 4.9 &  & 3.947 & 7 & 9.6 &  & green & 0.10 \\ 
+  C & DCC-n-Chol &  & 0.666 & 6 & 5.0 &  & 4.059 & 8 & 11.0 &  & green & 0.03 \\ 
+  C & DCC-gjr-t-Chol &  & 0.658 & 3 & 5.0 &  & 4.086 & 9 & 11.0 &  & grey & 0.05 \\ 
+  C & DCC-t-sym &  & 0.668 & 12 & 5.1 &  & 4.133 & 10 & 10.9 &  & yellow & 0.33 \\ 
+  C & DCC-gjr-t-sym &  & 0.658 & 2 & 5.0 &  & 4.162 & 11 & 8.6 &  & grey & 0.05 \\ 
+  C & DCC-t-Chol &  & 0.667 & 11 & 5.1 &  & 4.195 & 12 & 11.6 &  &  &  \\ 
+  GS & CoCAViaR-AS-pos &  & 0.606 & 3 & 4.3 &  & 3.161 & 1 & 5.5 &  & green & 0.03 \\ 
+  GS & CoCAViaR-AS-mixed &  & 0.605 & 2 & 4.7 &  & 3.232 & 2 & 4.2 &  & grey & 0.01 \\ 
+  GS & CoCAViaR-SAV-fullA &  & 0.611 & 6 & 4.7 &  & 3.380 & 3 & 9.2 &  & yellow & 0.12 \\ 
+  GS & CoCAViaR-AS-signs &  & 0.603 & 1 & 5.0 &  & 3.441 & 4 & 4.0 &  & grey & 0.00 \\ 
+  GS & CoCAViaR-SAV-full &  & 0.611 & 6 & 4.7 &  & 3.538 & 5 & 10.1 &  & yellow & 0.18 \\ 
+  GS & CoCAViaR-SAV-diag &  & 0.614 & 8 & 4.9 &  & 3.659 & 6 & 6.5 &  & yellow & 0.16 \\ 
+  GS & DCC-n-sym &  & 0.618 & 10 & 4.3 &  & 3.819 & 7 & 10.0 &  & green & 0.08 \\ 
+  GS & DCC-n-Chol &  & 0.619 & 12 & 4.3 &  & 3.908 & 8 & 13.0 &  & green & 0.00 \\ 
+  GS & DCC-t-sym &  & 0.617 & 9 & 4.6 &  & 4.012 & 9 & 9.4 &  & grey & 0.01 \\ 
+  GS & DCC-gjr-t-sym &  & 0.609 & 5 & 4.1 &  & 4.072 & 10 & 11.7 &  & grey & 0.04 \\ 
+  GS & DCC-gjr-t-Chol &  & 0.608 & 4 & 4.2 &  & 4.149 & 11 & 13.1 &  & grey & 0.02 \\ 
+  GS & DCC-t-Chol &  & 0.619 & 11 & 4.6 &  & 4.167 & 12 & 12.0 &  &  &  \\ 
+  JPM & CoCAViaR-AS-mixed &  & 0.547 & 1 & 4.0 &  & 2.918 & 1 & 6.9 &  & grey & 0.00 \\ 
+  JPM & CoCAViaR-AS-signs &  & 0.549 & 3 & 4.1 &  & 3.040 & 2 & 6.7 &  & grey & 0.00 \\ 
+  JPM & CoCAViaR-SAV-fullA &  & 0.558 & 6 & 4.1 &  & 3.086 & 3 & 12.5 &  & green & 0.01 \\ 
+  JPM & CoCAViaR-SAV-full &  & 0.558 & 6 & 4.1 &  & 3.146 & 4 & 10.6 &  & green & 0.01 \\ 
+  JPM & CoCAViaR-AS-pos &  & 0.548 & 2 & 4.7 &  & 3.379 & 5 & 8.3 &  & grey & 0.00 \\ 
+  JPM & CoCAViaR-SAV-diag &  & 0.564 & 8 & 4.3 &  & 3.485 & 6 & 8.2 &  & green & 0.09 \\ 
+  JPM & DCC-n-sym &  & 0.569 & 11 & 3.7 &  & 3.619 & 7 & 17.2 &  & green & 0.00 \\ 
+  JPM & DCC-t-sym &  & 0.571 & 12 & 3.8 &  & 3.893 & 8 & 20.8 &  & red & 0.00 \\ 
+  JPM & DCC-n-Chol &  & 0.566 & 9 & 4.0 &  & 3.968 & 9 & 18.8 &  & green & 0.00 \\ 
+  JPM & DCC-gjr-t-sym &  & 0.555 & 5 & 3.8 &  & 4.032 & 10 & 17.7 &  & grey & 0.01 \\ 
+  JPM & DCC-t-Chol &  & 0.567 & 10 & 4.1 &  & 4.242 & 11 & 21.4 &  &  &  \\ 
+  JPM & DCC-gjr-t-Chol &  & 0.553 & 4 & 3.9 &  & 4.418 & 12 & 19.2 &  & grey & 0.00 \\ 
+  SPF & CoCAViaR-SAV-fullA &  & 0.457 & 12 & 4.2 &  & 3.058 & 1 & 9.3 &  & green & 0.00 \\ 
+  SPF & CoCAViaR-AS-mixed &  & 0.439 & 2 & 4.5 &  & 3.185 & 2 & 5.3 &  & grey & 0.00 \\ 
+  SPF & CoCAViaR-AS-signs &  & 0.437 & 1 & 4.7 &  & 3.296 & 3 & 6.8 &  & grey & 0.00 \\ 
+  SPF & CoCAViaR-AS-pos &  & 0.446 & 5 & 4.7 &  & 3.354 & 4 & 5.9 &  & green & 0.01 \\ 
+  SPF & CoCAViaR-SAV-diag &  & 0.456 & 8 & 4.1 &  & 3.473 & 5 & 10.5 &  & green & 0.01 \\ 
+  SPF & CoCAViaR-SAV-full &  & 0.457 & 12 & 4.2 &  & 3.651 & 6 & 10.3 &  & yellow & 0.20 \\ 
+  SPF & DCC-gjr-t-sym &  & 0.441 & 4 & 4.3 &  & 4.062 & 7 & 14.5 &  & grey & 0.00 \\ 
+  SPF & DCC-n-sym &  & 0.454 & 6 & 4.5 &  & 4.223 & 8 & 16.7 &  & grey & 0.00 \\ 
+  SPF & DCC-gjr-t-Chol &  & 0.440 & 3 & 4.8 &  & 4.475 & 9 & 17.4 &  & grey & 0.00 \\ 
+  SPF & DCC-n-Chol &  & 0.454 & 7 & 4.4 &  & 4.482 & 10 & 20.5 &  & grey & 0.01 \\ 
+  SPF & DCC-t-sym &  & 0.456 & 10 & 4.5 &  & 4.544 & 11 & 18.3 &  & yellow & 0.15 \\ 
+  SPF & DCC-t-Chol &  & 0.456 & 9 & 4.5 &  & 4.704 & 12 & 21.1 &  &  &  \\ 
+   \bottomrule
+\end{tabular}
+\end{table}
